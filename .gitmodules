@@ -1,3 +1,6 @@
 [submodule "spacevim/.SpaceVim"]
 	path = spacevim/.SpaceVim
 	url = https://github.com/SpaceVim/SpaceVim.git
+[submodule "gitprompt/.bash-git-prompt"]
+	path = gitprompt/.bash-git-prompt
+	url = https://github.com/magicmonty/bash-git-prompt.git
