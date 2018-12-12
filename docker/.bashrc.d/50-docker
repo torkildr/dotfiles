@@ -1,2 +1,2 @@
-alias docker='sudo docker'
-alias compose='sudo docker-compose'
+alias docker='sudo -E docker'
+alias compose='sudo -E docker-compose'
