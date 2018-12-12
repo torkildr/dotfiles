@@ -1,0 +1,2 @@
+alias docker='sudo docker'
+alias compose='sudo docker-compose'
