@@ -29,3 +29,11 @@ This makes it possible and easy to make partial bashrc-scripts that only
 include the module-specific parts. This system will also make sure that you can,
 in a deterministic manner, load scripts that are dependent on each other.
 
+The crux of the loading is very simple
+```bash
+for file in ~/.bashrc.d/*;
+do
+  source "$file"
+done
+```
+
