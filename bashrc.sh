@@ -30,7 +30,7 @@ echo "using bashrc: ${bashrc}"
 cat << "EOF" >> $bashrc
 
 # load .bashrc.d files
-BASHRC_D_SOURCED=true
+export BASHRC_D_SOURCED=true
 for file in ~/.bashrc.d/*;
 do
   source "$file"
