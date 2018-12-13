@@ -4,3 +4,6 @@
 [submodule "gitprompt/.bash-git-prompt"]
 	path = configs/.bash-git-prompt
 	url = https://github.com/magicmonty/bash-git-prompt.git
+[submodule "configs/.dircolors"]
+	path = configs/.dircolors
+	url = https://github.com/seebi/dircolors-solarized.git

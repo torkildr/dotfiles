@@ -1,4 +1,1 @@
-alias grep="grep --color=auto"
-
 GIT_PROMPT_END_USER="\n${Cyan}\u ${White}${ResetColor} $ "
-
