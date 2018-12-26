@@ -2,8 +2,9 @@
 
 set -e
 
-git submodule init
 git pull --recurse-submodules
+git submodule init
+git submodule update
 
 modules=($(echo */ | sed 's/\///g'))
 
