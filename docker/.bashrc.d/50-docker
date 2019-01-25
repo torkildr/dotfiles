@@ -1,2 +1,46 @@
 alias docker='sudo -E docker'
 alias compose='sudo -E docker-compose'
+
+function docker-bash {
+  if [ -z $1 ]; then
+    echo 'no container given'
+  else
+    docker exec -it $1 /bin/bash
+  fi
+}
+
+function docker-stats {
+  containers=$(docker ps --format "{{ .Names }}" | tr '\n' ' ')
+  docker stats $containers
+}
+
+function docker-log {
+  args="--tail 10 -f"
+  if [ ! -z $2 ]; then
+    args=$2
+  fi
+
+  if [ -z $1 ]; then
+    echo 'no container given'
+  else
+    docker logs $args $1
+  fi
+}
+
+function docker-recreate {
+  compose stop $1
+  compose rm -f $1
+  compose up -d $1
+}
+
+function docker-outdated {
+  old=$(docker ps --format "{{.Image}}"|grep -E '[0-9a-f]{12}'|sort|uniq)
+
+  for image in $old; do
+    containers=$(docker ps --format "{{.Names}}" --filter ancestor=$image)
+    echo "image: ${image}"
+    echo "$containers"
+    echo
+  done
+}
+
