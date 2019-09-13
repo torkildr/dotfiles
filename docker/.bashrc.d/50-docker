@@ -1,5 +1,7 @@
-alias docker='sudo -E docker'
-alias compose='sudo -E docker-compose'
+if [ $UNAME_OS != "Darwin" ]; then
+  alias docker='sudo -E docker'
+  alias compose='sudo -E docker-compose'
+fi
 
 function docker-bash {
   if [ -z $1 ]; then
