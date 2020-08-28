@@ -44,5 +44,7 @@ function docker-outdated {
     echo "$containers"
     echo
   done
+
+  return $old
 }
 
