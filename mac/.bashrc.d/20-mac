@@ -1,4 +1,0 @@
-GIT_PROMPT_END_USER="\n${Cyan}\u ${White}${ResetColor} $ "
-
-export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-

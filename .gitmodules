@@ -7,3 +7,9 @@
 [submodule "configs/.dircolors"]
 	path = configs/.dircolors
 	url = https://github.com/seebi/dircolors-solarized.git
+[submodule "configs/.oh-my-zsh"]
+	path = configs/.oh-my-zsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
+[submodule "configs/.omz-custom/plugins/zsh-autosuggestions"]
+	path = configs/.omz-custom/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
