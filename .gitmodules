@@ -13,3 +13,6 @@
 [submodule "configs/.omz-custom/plugins/zsh-autosuggestions"]
 	path = configs/.omz-custom/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "configs/.n"]
+	path = configs/.n
+	url = https://github.com/tj/n.git
