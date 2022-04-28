@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
-
+git submodule update --init --recursive
 git pull --recurse-submodules
 git submodule init
 git submodule update
