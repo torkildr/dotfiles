@@ -1,0 +1,3 @@
+alias devup="docker-compose -f development.yml up -d"
+alias devdown="docker-compose -f development.yml down"
+
