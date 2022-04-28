@@ -16,3 +16,6 @@
 [submodule "configs/.n"]
 	path = configs/.n
 	url = https://github.com/tj/n.git
+[submodule "configs/.spaceship-prompt"]
+	path = configs/.spaceship-prompt
+	url = https://github.com/spaceship-prompt/spaceship-prompt.git
