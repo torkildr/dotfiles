@@ -3,35 +3,28 @@ Dotfiles
 
 ## Usage
 
-Should be put in place with GNU `stow` for each module, eg.
+It should mostly be enough to run the `update.sh` script on changes. Everything assumes a `zsh` shell.
 
-```
-stow spacevim
-```
+## zshrc.d
 
-## bashrc.d
+The supplied `zshrc.sh` script will add `.zshrc.d` loading to your `.zshrc`-file.
 
-Some of the modules uses its own system to load partial `.bashrc` scripts.
-
-The supplied `bashrc.sh` script will add `bashrc.d` loading to your `.bashrc`-file
-(it will look for, in order: `.bashrc`, `.profile` or `.bash_profile`).
-
-Files in the `.bashrc.d` directory will then be loaded in search order, from across
+Files in the `.zshrc.d` directory will then be loaded in search order, from across
 the different modules.
 
 ```
-.bashrc.d/
-├── 20-mac -> ../dotfiles/mac/.bashrc.d/20-mac
-└── 99-gitprompt -> ../dotfiles/gitprompt/.bashrc.d/99-gitprompt
+.zshrc.d/
+├── 10-foo -> ../dotfiles/a/.zshrc.d/10-foo
+└── 99-bar -> ../dotfiles/b/.zshrc.d/99-bar
 ```
 
-This makes it possible and easy to make partial bashrc-scripts that only
+This makes it possible and easy to make partial zshrc-scripts that only
 include the module-specific parts. This system will also make sure that you can,
 in a deterministic manner, load scripts that are dependent on each other.
 
 The crux of the loading is very simple
 ```bash
-for file in ~/.bashrc.d/*;
+for file in ~/.zshrc.d/*;
 do
   source "$file"
 done

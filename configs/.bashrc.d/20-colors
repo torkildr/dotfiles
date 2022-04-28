@@ -1,8 +1,0 @@
-if [ "$UNAME_OS" = "Darwin" ]; then
-  export CLICOLOR=YES
-else
-  alias ls="ls --color=auto"
-fi
-
-alias grep="grep --color=auto"
-

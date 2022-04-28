@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+function docker-outdated {
+  old=$(docker ps --format "{{.Image}}"|grep -E '[0-9a-f]{12}'|sort|uniq)
+
+  for image in $old; do
+    containers=$(docker ps --format "{{.Names}}" --filter ancestor=$image)
+    echo "image: ${image}"
+    echo "$containers"
+    echo
+  done
+
+  return $old
+}
+

@@ -1,4 +1,0 @@
-if [ "$UNAME_OS" != "Darwin" ]; then
-  eval $(dircolors ~/.dircolors/dircolors.ansi-dark)
-fi
-
