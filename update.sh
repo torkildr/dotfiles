@@ -3,10 +3,7 @@
 echo "checking .zshrd.c activation"
 ./zshrc.sh
 
-git submodule update --init --recursive
-git pull --recurse-submodules
-git submodule init
-git submodule update
+git submodule update --init --recursive --remote
 
 stow_modules=($(echo */ | sed 's/\///g'))
 

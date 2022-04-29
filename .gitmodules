@@ -1,21 +1,28 @@
-[submodule "spacevim/.SpaceVim"]
+[submodule "configs/.SpaceVim"]
 	path = configs/.SpaceVim
 	url = https://github.com/SpaceVim/SpaceVim.git
-[submodule "gitprompt/.bash-git-prompt"]
+	branch = master
+[submodule "configs/.bash-git-prompt"]
 	path = configs/.bash-git-prompt
 	url = https://github.com/magicmonty/bash-git-prompt.git
+	branch = master
 [submodule "configs/.dircolors"]
 	path = configs/.dircolors
 	url = https://github.com/seebi/dircolors-solarized.git
+	branch = master
 [submodule "configs/.oh-my-zsh"]
 	path = configs/.oh-my-zsh
 	url = https://github.com/ohmyzsh/ohmyzsh.git
+	branch = master
 [submodule "configs/.omz-custom/plugins/zsh-autosuggestions"]
 	path = configs/.omz-custom/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
+	branch = master
 [submodule "configs/.n"]
 	path = configs/.n
 	url = https://github.com/tj/n.git
+	branch = master
 [submodule "configs/.spaceship-prompt"]
 	path = configs/.spaceship-prompt
 	url = https://github.com/spaceship-prompt/spaceship-prompt.git
+	branch = master
