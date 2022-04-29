@@ -1,0 +1,5 @@
+VIRTUALENVWRAPPER_DIR=~/.virtualenvwrapper
+export VIRTUALENVWRAPPER_SCRIPT=$VIRTUALENVWRAPPER_DIR/virtualenvwrapper.sh
+
+source $VIRTUALENVWRAPPER_DIR/virtualenvwrapper_lazy.sh
+
