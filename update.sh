@@ -1,11 +1,14 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+
+echo "checking .zshrd.c activation"
+./zshrc.sh
 
 git submodule update --init --recursive
 git pull --recurse-submodules
 git submodule init
 git submodule update
 
-modules=($(echo */ | sed 's/\///g'))
+stow_modules=($(echo */ | sed 's/\///g'))
 
 while true
 do
@@ -14,7 +17,7 @@ do
 
   # list modules
   i=1
-  for module in "${modules[@]}"
+  for module in "${stow_modules[@]}"
   do
     echo "${i}) ${module}"
     let "i++"
@@ -24,12 +27,12 @@ do
   echo
   read n
 
-  if [ -z "$n" -o "$n" == "q" ]; then
+  if [[ "$n" == "" || $n == "q" ]]; then
     echo "All done"
     exit 0
   fi
 
-  choice="${modules[n-1]}"
+  choice="${stow_modules[n]}"
   echo "stowing \"${choice}\""
   echo
   stow "$choice"
