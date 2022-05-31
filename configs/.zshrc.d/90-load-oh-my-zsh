@@ -6,6 +6,8 @@ ZSH_CUSTOM="$HOME/.omz-custom"
 ZSH_THEME="spaceship"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 
+zstyle ':omz:update' mode disabled
+
 plugins=(
   git
   zsh-autosuggestions
