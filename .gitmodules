@@ -28,4 +28,4 @@
 	branch = master
 [submodule "configs/.virtualenvwrapper"]
 	path = configs/.virtualenvwrapper
-	url = https://bitbucket.org/virtualenvwrapper/virtualenvwrapper.git
+	url = git@github.com:torkildr/virtualenvwrapper.git
