@@ -1,0 +1,40 @@
+[user]
+  name = Torkild Retvedt
+[push]
+  default = simple
+  followTags = true
+[alias]
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+  st = status
+  t = tag --format '%(color:green)%(refname:short)%(color:reset) %(taggerdate) (%(taggername))' --sort taggerdate
+  stat = !"git shortlog -sn|sort -n"
+  find = git log --full-history --all -p -G
+[core]
+  excludesfile = ~/.gitignore_global
+  whitespace = trailing-space,-space-before-ta
+  pager = diff-so-fancy | less --tabs=4 -RFX
+[merge]
+  ff = only
+  tool = code
+[diff]
+  tool = code
+[mergetool "code"]
+  path = ~bin/code
+[difftool "code"]
+  path = ~bin/code
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+[commit]
+  template = ~/.gitcommitmsg
+[pull]
+  ff = only
+[init]
+  defaultBranch = main
+[http]
+  postBuffer = 1048576000
+[includeIf "gitdir:~/work"]
+  path = ~/work/.gitconfig
+
