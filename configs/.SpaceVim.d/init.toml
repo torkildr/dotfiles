@@ -34,6 +34,10 @@
   name = "vim-scripts/dbext.vim"
   merged = 0
 
+[[custom_plugins]]
+  name = "isobit/vim-caddyfile"
+  merged = 0
+
 [[layers]]
   name = "colorscheme"
 
