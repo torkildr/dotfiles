@@ -12,7 +12,6 @@
 [core]
   excludesfile = ~/.gitignore_global
   whitespace = trailing-space,-space-before-ta
-  pager = diff-so-fancy | less --tabs=4 -RFX
 [merge]
   ff = only
 [mergetool "code"]
