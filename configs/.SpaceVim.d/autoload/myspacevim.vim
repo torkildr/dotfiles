@@ -1,4 +1,5 @@
 func! myspacevim#before() abort
+  set modeline
 endf
 
 func! myspacevim#after() abort
