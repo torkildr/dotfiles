@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-sudo docker exec -w /etc/caddy $(sudo docker ps | grep caddy | awk '{print $1;}') caddy reload
+set -e
+
+sudo -E docker compose exec -w /etc/caddy caddy caddy reload
 
