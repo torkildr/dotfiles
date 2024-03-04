@@ -28,4 +28,4 @@
 	branch = master
 [submodule "configs/.virtualenvwrapper"]
 	path = configs/.virtualenvwrapper
-	url = git@github.com:torkildr/virtualenvwrapper.git
+	url = https://github.com/python-virtualenvwrapper/virtualenvwrapper.git
