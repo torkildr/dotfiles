@@ -1,6 +1,6 @@
 [submodule "configs/.SpaceVim"]
 	path = configs/.SpaceVim
-	url = https://gitlab.com/SpaceVim/SpaceVim.git
+	url = https://github.com/SpaceVim/SpaceVim.git
 	branch = master
 [submodule "configs/.bash-git-prompt"]
 	path = configs/.bash-git-prompt
