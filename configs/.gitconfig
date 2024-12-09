@@ -1,5 +1,6 @@
 [user]
-  name = Torkild Retvedt
+	name = Torkild Retvedt
+	email = torkild@retvedt.no
 [push]
   default = simple
   followTags = true
