@@ -29,9 +29,9 @@
 [pull]
   ff = only
 [init]
-  defaultBranch = main
+	defaultBranch = main
 [http]
   postBuffer = 1048576000
-[includeIf "gitdir:~/work"]
+[includeIf "gitdir:~/work/"]
   path = ~/work/.gitconfig
 

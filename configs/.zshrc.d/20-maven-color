@@ -1,1 +1,1 @@
-MAVEN_ARGS="-Dstyle.color=always"
+export MAVEN_ARGS="-Dstyle.color=always"
