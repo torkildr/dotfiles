@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 use_python() {
     if [ -n "$(which pyenv)" ]; then
         local pyversion=$1
@@ -18,5 +20,17 @@ layout_activate() {
     if [ -n "$(which pyenv)" ]; then
         source $(pyenv root)/versions/$1/bin/activate
     fi
+}
+
+use_sdk() {
+  [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+
+  while (( "$#" >= 2 )); do
+    local candidate=$1
+    local candidate_version=$2
+    sdk use $candidate $candidate_version
+
+    shift 2
+  done
 }
 

@@ -38,6 +38,10 @@
   name = "isobit/vim-caddyfile"
   merged = 0
 
+[[custom_plugins]]
+  name = "Exafunction/windsurf.vim"
+  merged = 0
+
 [[layers]]
   name = "colorscheme"
 
