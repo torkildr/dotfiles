@@ -1,36 +1,51 @@
 #!/usr/bin/bash
 
 use_python() {
-    if [ -n "$(which pyenv)" ]; then
-        local pyversion=$1
-        pyenv local ${pyversion}
-    fi
+  if [ -n "$(which pyenv)" ]; then
+    local pyversion=$1
+    pyenv local ${pyversion}
+  fi
 }
 
 layout_virtualenv() {
-    local pyversion=$1
-    local pvenv=$2
-    if [ -n "$(which pyenv virtualenv)" ]; then
-        pyenv virtualenv --force --quiet ${pyversion} ${pvenv}-${pyversion}
-    fi
-    pyenv local --unset
+  local pyversion=$1
+  local pvenv=$2
+  if [ -n "$(which pyenv virtualenv)" ]; then
+    pyenv virtualenv --force --quiet ${pyversion} ${pvenv}-${pyversion}
+  fi
+  pyenv local --unset
 }
 
 layout_activate() {
-    if [ -n "$(which pyenv)" ]; then
-        source $(pyenv root)/versions/$1/bin/activate
-    fi
+  if [ -n "$(which pyenv)" ]; then
+    source $(pyenv root)/versions/$1/bin/activate
+  fi
+}
+
+activate_venv() {
+  source ~/.venvs/$1/bin/activate
 }
 
 use_sdk() {
   [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 
-  while (( "$#" >= 2 )); do
+  while (("$#" >= 2)); do
     local candidate=$1
     local candidate_version=$2
+
+    # Remove all existing paths for this candidate from PATH
+    local new_path=""
+    IFS=':' read -ra PATH_ARRAY <<<"$PATH"
+    for p in "${PATH_ARRAY[@]}"; do
+      if [[ ! "$p" =~ ${SDKMAN_DIR}/candidates/${candidate}/ ]]; then
+        new_path="${new_path:+$new_path:}$p"
+      fi
+    done
+    export PATH="$new_path"
+
+    # Now use the specific version
     sdk use $candidate $candidate_version
 
     shift 2
   done
 }
-
