@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+set -e
+
 echo "checking .zshrd.c activation"
 ./zshrc.sh
 
