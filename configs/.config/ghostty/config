@@ -1,6 +1,6 @@
 # This is the configuration file for Ghostty.
 
-font-family = Iosevka Nerd Font
+font-family = "Iosevka"
 font-size = 14
 shell-integration-features = ssh-env
 keybind = shift+enter=text:\x1b\r
@@ -8,3 +8,6 @@ keybind = shift+enter=text:\x1b\r
 working-directory = home
 window-inherit-working-directory = false
 tab-inherit-working-directory = false
+
+background-opacity = 0.96
+background-blur = macos-glass-clear
