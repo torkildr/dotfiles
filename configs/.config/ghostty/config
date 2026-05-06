@@ -9,5 +9,5 @@ working-directory = home
 window-inherit-working-directory = false
 tab-inherit-working-directory = false
 
-background-opacity = 0.96
+background-opacity = 0.98
 background-blur = macos-glass-clear

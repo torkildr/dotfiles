@@ -49,3 +49,17 @@ use_sdk() {
     shift 2
   done
 }
+
+# Resolve 1Password references for the given variable names
+op_resolve() {
+  for var in "$@"; do
+    local val="${!var}"
+    if [[ "$val" == op://* ]]; then
+      local resolved
+      resolved=$(op read --no-newline "$val" 2>/dev/null)
+      if [[ $? -eq 0 ]]; then
+        export "$var=$resolved"
+      fi
+    fi
+  done
+}

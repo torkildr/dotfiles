@@ -1,3 +1,6 @@
-alias devup="docker-compose -f development.yml up -d"
-alias devdown='docker stop $(docker container ls -q)'
+export PODMAN_COMPOSE_PROVIDER=/opt/homebrew/bin/docker-compose
+export PODMAN_COMPOSE_WARNING_LOGS=false
+
+alias devup="podman compose -f development.yml up -d"
+alias devdown='podman stop $(podman container ls -q)'
 
