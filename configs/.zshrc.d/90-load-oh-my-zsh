@@ -6,6 +6,7 @@ ZSH_CUSTOM="$HOME/.omz-custom"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 
 zstyle ':omz:update' mode disabled
+zstyle ':omz:alpha:lib:git' async-prompt no
 
 plugins=(
   git
