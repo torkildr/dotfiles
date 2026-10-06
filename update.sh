@@ -43,8 +43,9 @@ install_loader "$HOME/.zprofile" ' && [[ ! -o interactive ]]'
 install_loader "$HOME/.zshrc" ''
 
 echo "==> updating submodules"
-git submodule sync --recursive --quiet
-git submodule update --init --recursive --remote --jobs 8
+git submodule sync --quiet
+# no --recursive: nested submodules are only upstream test deps
+git submodule update --init --remote --jobs 8
 
 echo "==> stowing configs"
 stow -d "$dir" -t "$HOME" --restow configs

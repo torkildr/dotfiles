@@ -25,6 +25,7 @@
 [submodule "configs/.config/nvim"]
 	path = configs/.config/nvim
 	url = git@github.com:torkildr/LazyVim.git
+	ignore = dirty
 [submodule "configs/.diff-so-fancy"]
 	path = configs/.diff-so-fancy
 	url = https://github.com/so-fancy/diff-so-fancy.git
