@@ -5,7 +5,7 @@
   default = simple
   followTags = true
 [alias]
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+  lg = log --graph --date=format:'%Y-%m-%d %H:%M' --pretty=format:'%Cred%h%Creset -%C(bold yellow)%d%Creset %s %Cgreen(%cr, %C(white)%cd%Creset%Cgreen)%Creset %C(bold blue)<%an>%Creset'
   st = status
   t = tag --format '%(color:green)%(refname:short)%(color:reset) %(taggerdate) (%(taggername))' --sort taggerdate
   stat = !"git shortlog -sn|sort -n"
@@ -42,3 +42,5 @@
 
 [interactive]
 	diffFilter = diff-so-fancy --patch
+[mailmap]
+	file = /Users/torkildr/.mailmap
