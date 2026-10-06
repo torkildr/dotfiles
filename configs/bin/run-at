@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+# run-at: wait until a given time, then run a command.
+# Requires GNU date: "date" on Linux, "gdate" (brew install coreutils) on macOS.
+
+set -u
+
+usage() {
+  cat >&2 <<EOF
+Usage: ${0##*/} [-q] [--] WHEN COMMAND [ARGS...]
+       ${0##*/} [-q] -d DATESTRING [--] COMMAND [ARGS...]
+
+WHEN is one of:
+  HH:MM[:SS]   next occurrence of that clock time (24h); tomorrow if passed
+  +DURATION    relative delay, e.g. +90m, +1h30m, +45s, +2d (bare +N = minutes)
+
+Options:
+  -q           quiet: print nothing (errors still go to stderr)
+  -d STRING    let GNU date parse STRING, e.g. -d "next friday 08:00";
+               must resolve to a time in the future
+  --           end of options; everything after WHEN is the command
+EOF
+  exit 2
+}
+
+die() { echo "${0##*/}: $*" >&2; exit 1; }
+
+# --- pick a GNU date -----------------------------------------------------
+if [[ $(uname -s) == Darwin ]]; then
+  command -v gdate >/dev/null 2>&1 \
+    || die "macOS detected: GNU date (gdate) is required; install with 'brew install coreutils'"
+  DATE=gdate
+else
+  DATE=date
+fi
+
+# --- options -------------------------------------------------------------
+quiet=0
+dstr=
+while (( $# )); do
+  case $1 in
+    -q) quiet=1; shift ;;
+    -d) shift; (( $# )) || usage; dstr=$1; shift ;;
+    -h|--help) usage ;;
+    --) shift; break ;;
+    -?*) echo "${0##*/}: unknown option: $1" >&2; usage ;;
+    *) break ;;
+  esac
+done
+
+# --- work out the target time -------------------------------------------
+now=$("$DATE" +%s)
+
+if [[ -n $dstr ]]; then
+  target=$("$DATE" -d "$dstr" +%s 2>/dev/null) || die "cannot parse date string '$dstr'"
+  (( target > now )) || die "'$dstr' is not in the future"
+else
+  (( $# >= 1 )) || usage
+  when=$1; shift
+
+  if [[ $when =~ ^[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?$ ]]; then
+    [[ $when =~ ^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$ ]] \
+      || die "invalid time '$when' (expected HH:MM or HH:MM:SS, 24h)"
+    target=$("$DATE" -d "today $when" +%s 2>/dev/null) || die "cannot parse time '$when'"
+    (( target > now )) || target=$("$DATE" -d "tomorrow $when" +%s) \
+      || die "cannot compute target time"
+
+  elif [[ $when == +* ]]; then
+    rest=${when#+}
+    secs=0
+    if [[ $rest =~ ^[0-9]+$ ]]; then
+      secs=$(( 10#$rest * 60 ))                  # bare number = minutes
+    else
+      [[ $rest =~ ^([0-9]+[smhd])+$ ]] \
+        || die "invalid duration '$when' (expected e.g. +90m, +1h30m, +45s, +2d)"
+      while [[ $rest =~ ^([0-9]+)([smhd])(.*)$ ]]; do
+        n=$(( 10#${BASH_REMATCH[1]} ))
+        case ${BASH_REMATCH[2]} in
+          s) (( secs += n )) ;;
+          m) (( secs += n * 60 )) ;;
+          h) (( secs += n * 3600 )) ;;
+          d) (( secs += n * 86400 )) ;;
+        esac
+        rest=${BASH_REMATCH[3]}
+      done
+    fi
+    (( secs > 0 )) || die "duration must be greater than zero"
+    target=$(( now + secs ))
+
+  else
+    die "invalid WHEN '$when' (expected HH:MM[:SS] or +DURATION; use -d for date strings)"
+  fi
+fi
+
+# Optional "--" between WHEN and the command: run-at 10:05 -- foo -x
+[[ ${1-} == -- ]] && shift
+(( $# >= 1 )) || usage
+
+# --- validate command ----------------------------------------------------
+cmd=$1
+case $(type -t -- "$cmd" 2>/dev/null) in
+  builtin) ;;                                   # runs fine inside this script
+  file)
+    path=$(type -P -- "$cmd")
+    [[ -x $path && ! -d $path ]] || die "'$cmd' is not executable: $path"
+    ;;
+  alias|function) die "'$cmd' is a shell alias/function; it won't exist when this script runs it" ;;
+  keyword)        die "'$cmd' is a shell keyword; wrap it in: bash -c '...'" ;;
+  *)
+    if [[ $cmd == */* ]]; then
+      [[ -e $cmd ]]  || die "no such file: $cmd"
+      [[ -d $cmd ]]  && die "is a directory: $cmd"
+      [[ -x $cmd ]]  || die "not executable: $cmd"
+    else
+      die "command not found: $cmd"
+    fi
+    ;;
+esac
+
+# --- announce ------------------------------------------------------------
+if (( ! quiet )); then
+  secs=$(( target - now ))
+  printf -v shown '%q ' "$@"
+  printf "Will run: %s\n  at %s (in %dh %02dm %02ds)\n" \
+    "${shown% }" "$("$DATE" -d "@$target" '+%a %Y-%m-%d %H:%M:%S')" \
+    $(( secs / 3600 )) $(( secs % 3600 / 60 )) $(( secs % 60 ))
+fi
+
+# --- wait (in short chunks so suspend/clock changes don't make us late) ---
+while :; do
+  now=$("$DATE" +%s)
+  left=$(( target - now ))
+  (( left > 0 )) || break
+  sleep "$(( left > 30 ? 30 : left ))"
+done
+
+exec "$@"
