@@ -18,17 +18,19 @@ if [[ "${1:-}" != "--no-pull" ]]; then
 fi
 
 echo "==> ensuring .zshrc.d loader in ~/.zprofile and ~/.zshrc"
-# guard var is not exported: loads once per shell, whichever rc file runs first
-marker="# load .zshrc.d files (guarded)"
-for rc in "$HOME/.zprofile" "$HOME/.zshrc"; do
-  grep -qF "$marker" "$rc" 2>/dev/null && continue
+# loads once per shell (guard var not exported). interactive shells defer to
+# .zshrc, since /etc/zshrc runs after .zprofile and resets the prompt.
+marker="# load .zshrc.d files (v2)"
+install_loader() {
+  local rc="$1" cond="$2"
+  grep -qF "$marker" "$rc" 2>/dev/null && return
   if grep -qF '.zshrc.d/*' "$rc" 2>/dev/null; then
-    echo "WARNING: unguarded loader in $rc, remove it to avoid double loading"
+    echo "WARNING: old loader in $rc, remove it"
   fi
   cat << EOF >> "$rc"
 
 $marker
-if [[ -z "\${_zshrc_d_loaded:-}" ]]; then
+if [[ -z "\${_zshrc_d_loaded:-}" ]]$cond; then
   _zshrc_d_loaded=1
   for file in ~/.zshrc.d/*(N); do
     source "\$file"
@@ -36,7 +38,9 @@ if [[ -z "\${_zshrc_d_loaded:-}" ]]; then
 fi
 EOF
   echo "added loader to $rc"
-done
+}
+install_loader "$HOME/.zprofile" ' && [[ ! -o interactive ]]'
+install_loader "$HOME/.zshrc" ''
 
 echo "==> updating submodules"
 git submodule sync --recursive --quiet
