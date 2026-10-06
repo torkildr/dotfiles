@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+[[ -o interactive ]] || return
+
 ZSH="$HOME/.oh-my-zsh"
 ZSH_CUSTOM="$HOME/.omz-custom"
 

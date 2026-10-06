@@ -3,30 +3,31 @@ Dotfiles
 
 ## Usage
 
-It should mostly be enough to run the `update.sh` script on changes. Everything assumes a `zsh` shell.
+```
+./update.sh
+```
+
+Pulls, refreshes submodules to their remote branches, ensures the `.zshrc.d`
+loader is in `~/.zprofile`, and restows `configs` into `$HOME`. Idempotent.
+Everything assumes a `zsh` shell.
 
 ## zshrc.d
 
-The supplied `zshrc.sh` script will add `.zshrc.d` loading to your `.zshrc`-file.
+Files in `~/.zshrc.d` are sourced in glob order, once per shell, from whichever of
+`~/.zprofile` (login) or `~/.zshrc` (interactive) runs first. Files needing an
+interactive shell should guard themselves:
 
-Files in the `.zshrc.d` directory will then be loaded in search order, from across
-the different modules.
-
-```
-.zshrc.d/
-├── 10-foo -> ../dotfiles/a/.zshrc.d/10-foo
-└── 99-bar -> ../dotfiles/b/.zshrc.d/99-bar
+```zsh
+[[ -o interactive ]] || return
 ```
 
-This makes it possible and easy to make partial zshrc-scripts that only
-include the module-specific parts. This system will also make sure that you can,
-in a deterministic manner, load scripts that are dependent on each other.
-
-The crux of the loading is very simple
-```bash
-for file in ~/.zshrc.d/*;
-do
-  source "$file"
-done
+The loader:
+```zsh
+# load .zshrc.d files (guarded)
+if [[ -z "${_zshrc_d_loaded:-}" ]]; then
+  _zshrc_d_loaded=1
+  for file in ~/.zshrc.d/*(N); do
+    source "$file"
+  done
+fi
 ```
-

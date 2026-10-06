@@ -1,40 +1,53 @@
 #!/usr/bin/env zsh
+#
+# Pull, refresh submodules and (re)stow configs. Safe to re-run.
+#
+#   ./update.sh            full update
+#   ./update.sh --no-pull  skip git pull (used internally after self-update)
 
-set -e
+set -euo pipefail
 
-echo "checking .zshrd.c activation"
-./zshrc.sh
+dir="${0:A:h}"
+cd "$dir"
 
-git submodule update --init --recursive --remote
+if [[ "${1:-}" != "--no-pull" ]]; then
+  echo "==> pulling"
+  git pull --ff-only
+  # re-exec in case this script changed
+  exec "$dir/update.sh" --no-pull
+fi
 
-stow_modules=($(echo */ | sed 's/\///g'))
-
-while true
-do
-  echo "------------"
-  echo "stow module:"
-
-  # list modules
-  i=1
-  for module in "${stow_modules[@]}"
-  do
-    echo "${i}) ${module}"
-    let "i++"
-  done
-  echo "q) quit"
-
-  echo
-  read n
-
-  if [[ "$n" == "" || $n == "q" ]]; then
-    echo "All done"
-    exit 0
+echo "==> ensuring .zshrc.d loader in ~/.zprofile and ~/.zshrc"
+# guard var is not exported: loads once per shell, whichever rc file runs first
+marker="# load .zshrc.d files (guarded)"
+for rc in "$HOME/.zprofile" "$HOME/.zshrc"; do
+  grep -qF "$marker" "$rc" 2>/dev/null && continue
+  if grep -qF '.zshrc.d/*' "$rc" 2>/dev/null; then
+    echo "WARNING: unguarded loader in $rc, remove it to avoid double loading"
   fi
+  cat << EOF >> "$rc"
 
-  choice="${stow_modules[n]}"
-  echo "stowing \"${choice}\""
-  echo
-  stow "$choice"
-
+$marker
+if [[ -z "\${_zshrc_d_loaded:-}" ]]; then
+  _zshrc_d_loaded=1
+  for file in ~/.zshrc.d/*(N); do
+    source "\$file"
+  done
+fi
+EOF
+  echo "added loader to $rc"
 done
 
+echo "==> updating submodules"
+git submodule sync --recursive --quiet
+git submodule update --init --recursive --remote --jobs 8
+
+echo "==> stowing configs"
+stow -d "$dir" -t "$HOME" --restow configs
+
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "==> local changes"
+  git status --short
+fi
+
+echo "done"
