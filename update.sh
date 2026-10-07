@@ -48,7 +48,12 @@ git submodule sync --quiet
 git submodule update --init --remote --jobs 8
 
 echo "==> stowing configs"
-stow -d "$dir" -t "$HOME" --restow configs
+# restow logs UNLINK + LINK per entry; unchanged ones end as "reverts previous action"
+stow_log="$(stow -v -d "$dir" -t "$HOME" --restow configs 2>&1)" || { echo "$stow_log"; exit 1; }
+n_unlink=$(grep -c '^UNLINK:' <<< "$stow_log" || true)
+n_kept=$(grep -c '^LINK:.*reverts previous action' <<< "$stow_log" || true)
+n_link=$(grep -c '^LINK:' <<< "$stow_log" || true)
+echo "stow: $(( n_link - n_kept )) linked, $(( n_unlink - n_kept )) unlinked, $n_kept unchanged"
 
 if [[ -n "$(git status --porcelain)" ]]; then
   echo "==> local changes"
